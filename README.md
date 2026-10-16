@@ -6,9 +6,10 @@ A small **FastAPI** REST API integrating a genuinely trained logistic-regression
 
 ## What it includes
 
+- Browser-based prediction playground at `/`, with two public benchmark examples and live results.
 - FastAPI application with automatically generated OpenAPI docs at `/docs`.
 - Trained `StandardScaler + LogisticRegression` model, exported to a small JSON artifact so inference does not depend on scikit-learn at runtime.
-- `GET /health`, `GET /model-info`, `GET /features`, and `POST /predict` endpoints.
+- `GET /health`, `GET /model-info`, `GET /features`, `GET /demo-samples`, and `POST /predict` endpoints.
 - Input validation for exactly 30 positive, finite numeric measurements.
 - Training code and isolated training dependencies to reproduce the model artifact.
 - Automated endpoint tests.
@@ -37,22 +38,24 @@ pip install -r requirements.txt
 uvicorn app:app --reload
 ```
 
-Open `http://127.0.0.1:8000/docs` to try the endpoints interactively.
+Open `http://127.0.0.1:8000/` to use the prediction page. Click **Load example A** or **Load example B**, then **Run prediction**. The app sends a request to the trained model and displays its benchmark class and scores. Open `http://127.0.0.1:8000/docs` to test the API directly.
 
 ## Endpoints
 
 | Method | Endpoint | Description |
 |---|---|---|
-| `GET` | `/` | API overview |
+| `GET` | `/` | Browser-based prediction playground |
+| `GET` | `/api` | JSON API overview |
 | `GET` | `/health` | Deployment/model health |
 | `GET` | `/model-info` | Dataset, model, and holdout metrics |
 | `GET` | `/features` | Required feature names and ordering |
+| `GET` | `/demo-samples` | Public benchmark examples for testing predictions |
 | `POST` | `/predict` | Returns benchmark class and model probability scores |
 | `GET` | `/docs` | Interactive Swagger UI |
 
 ### Prediction request
 
-Send the 30 values in the exact order provided by `GET /features`.
+For the browser playground, load either included example to test a prediction immediately. For direct API calls, send the 30 values in the exact order provided by `GET /features`.
 
 ```json
 {
